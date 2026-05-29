@@ -1,0 +1,23 @@
+package ch06;
+
+public class OperatorTest {
+    void main() {
+        int num1 = 5;
+        int num2 = 28;
+        int num3, num5;
+        double num4;
+
+        num3 = num2 * num1;
+        num4 = num2 / (double) num1;
+        num5 = num2 % num1;
+
+        System.out.println(num2 + " * " + num1 + " = " + num3);
+        System.out.println(num2 + " / " + num1 + " = " + num4);
+        System.out.println(num2 + " % " + num1 + " = " + num5);
+        System.out.println();
+        System.out.println("++" + num1 + " = " + ++num1);
+        System.out.println(num1 + "++ = " + num1++);
+        System.out.println("num1 = " + num1);
+        System.out.println();
+    }
+}
