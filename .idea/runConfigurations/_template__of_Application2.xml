@@ -1,9 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="true" type="Application" factoryName="Application">
-    <option name="ALTERNATIVE_JRE_PATH" value="temurin-25" />
-    <module name="java_kdh" />
-    <method v="2">
-      <option name="MakeNoErrorCheck" enabled="true" />
-    </method>
-  </configuration>
-</component>
