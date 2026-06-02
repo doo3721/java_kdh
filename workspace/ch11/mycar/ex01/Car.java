@@ -1,4 +1,4 @@
-package ch11.mycar;
+package ch11.mycar.ex01;
 
 public class Car {
 
@@ -29,7 +29,7 @@ public class Car {
     void start() {
         gearUp();
         speedUp();
-        System.out.println("출발합니다. 현재 기어는 " + gear + "단, 속도는 " + speed + "km/h 입니다.");
+        System.out.println(model + " 출발합니다. 현재 기어는 " + gear + "단, 속도는 " + speed + "km/h 입니다.");
     }
 
     void stop() {
