@@ -1,5 +1,6 @@
 package homework.h01;
 
+import java.util.Random;
 import java.util.Scanner;
 
 // 기획을 짜보자
@@ -20,7 +21,7 @@ public class Game {
     static int def = 0;
 
     static int roleDice(String str) {
-        int dice = (int) (Math.random() * 20) + 1;
+        int dice = new Random().nextInt(19) + 1;
 
         System.out.println("d20을 굴립니다. " + str);
         System.out.println(dice + "이(가) 나왔습니다.\n");
@@ -104,7 +105,7 @@ public class Game {
     }
 
     static void meetMonster() {
-        int action = (int) (Math.random() * 6) + 1;
+        int action = new Random().nextInt(5) + 1;
 
         switch (action) {
             case 1, 2, 3 -> fightMonster("슬라임", 20, 10);
@@ -114,7 +115,7 @@ public class Game {
     }
 
     static void recovery() {
-        int dice = (int) (Math.random() * 7) + 1;
+        int dice = new Random().nextInt(6) + 1;
         int recoveryHp = 0;
 
         recoveryHp = switch (dice) {
@@ -134,7 +135,7 @@ public class Game {
     }
 
     static void findItem() {
-        int dice = (int) (Math.random() * 10) + 1;
+        int dice = new Random().nextInt(9) + 1;
         System.out.println("물약을 발견했다!");
 
         switch (dice) {
@@ -166,7 +167,7 @@ public class Game {
         sc.nextLine();  // next의 개행 간섭으로 한번 개행을 비워야 한다.
         System.out.println(name + "님 환영합니다!");
 
-        int MAX_TURN = (int) (Math.random() * 6) + 5;
+        int MAX_TURN = new Random().nextInt(5) + 1;
         int curTurn = 1;
 
         System.out.println("당신은 " + MAX_TURN + "턴을 버티면 게임을 클리어 하게 됩니다.");
