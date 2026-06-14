@@ -67,13 +67,13 @@ SELECT id, name, created_at
     ORDER BY name ASC, created_at DESC;
 
 
--- 가장 최근에 작성된 게시글 5개만 조회
+-- 가장 최근에 작성된 게시글 2개만 조회
 SELECT id, title, created_at
     FROM post
     ORDER BY created_at DESC
     LIMIT 2;
 
--- 페이징 처리: 한 페이지에 2건씩, 2페이지 조회 (11번째~20번째 행)
+-- 페이징 처리: 한 페이지에 2건씩, 2페이지 조회 (3번째~4번째 행)
 SELECT id, title, created_at
     FROM post
     ORDER BY created_at DESC
