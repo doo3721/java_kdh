@@ -15,7 +15,9 @@ CREATE TABLE member (
     password VARCHAR(255) NOT NULL,
     name VARCHAR(50) NOT NULL,
     phone CHAR(12),
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    recommender_id INT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (recommender_id) REFERENCES member(id) ON DELETE SET NULL
 );
 
 -- post (게시글 테이블) 생성
@@ -41,14 +43,15 @@ CREATE TABLE reply (
 
 -- 회원 데이터 삽입
 INSERT INTO member VALUES 
-	(NULL, 'haru@gmail.com', 'pwd123', '하루', '01011112222', DEFAULT);
+	(NULL, 'haru@gmail.com', 'pwd123', '하루', '01011112222', NULL, DEFAULT);
 INSERT INTO member VALUES 
-	(NULL, 'haru2@gmail.com', 'pwd123', '하루2', NULL, '2025-05-10 12:13:45');
-INSERT INTO member (email, password, name, created_at) VALUES 
-	('namu@gmail.com', 'pwd789', '나무', '2026-04-29 13:34:32');
-INSERT INTO member (email, password, name, phone, created_at) VALUES
-    ('harong@gmail.com', 'pwd012', '하롱이', '01022223333', '2026-05-29 13:34:32'),
-    ('yong@gmail.com', 'pwd456', '용쌤', '0103334444', '2026-06-05 14:34:12');
+	(NULL, 'haru2@gmail.com', 'pwd123', '하루2', NULL, 1, '2025-05-10 12:13:45');
+INSERT INTO member (email, password, name, recommender_id, created_at) VALUES 
+	('namu@gmail.com', 'pwd789', '나무', NULL, '2026-04-29 13:34:32');
+INSERT INTO member (email, password, name, phone, recommender_id, created_at) VALUES
+    ('harong@gmail.com', 'pwd012', '하롱이', '01022223333', 1, '2026-05-29 13:34:32'),
+    ('yong@gmail.com', 'pwd456', '용쌤', '0103334444', 2, '2026-06-05 14:34:12'),
+	('gd@gmail.com', 'pwd456', 'GD쌤', '0102223333', NULL, '2026-06-05 13:34:32');
 
 
 -- 게시글 데이터 삽입
@@ -89,8 +92,8 @@ INSERT INTO post (member_id, title, content, created_at, view_count) VALUES
   (1, '여섯 번째 게시글', '자바 조건문 switch-case 문 실습을 하고 있습니다.', '2026-06-13 06:00:00', 7),
   (2, '안녕 테스트 글', '이 본문에는 안녕이라는 단어가 들어갑니다. 반갑습니다.', '2026-06-13 07:00:00', 13),
   (3, '추상 클래스와 인터페이스', '둘 다 추상 메서드를 가지는데 어떤 상황에 구분해서 쓸까요?', '2026-06-13 08:00:00', 25),
-  (4, '자바 static 키워드 정리', '클래스 멤버와 인스턴스 멤버의 차이를 정리했습니다.', DEFAULT, 6),
-  (5, '자바 형변환(Casting) 복습', '기본 타입과 참조 타입의 형변환 규칙을 정리해 봅니다.', DEFAULT, 33);
+  (NULL, '자바 static 키워드 정리', '클래스 멤버와 인스턴스 멤버의 차이를 정리했습니다.', DEFAULT, 6),
+  (NULL, '자바 형변환(Casting) 복습', '기본 타입과 참조 타입의 형변환 규칙을 정리해 봅니다.', DEFAULT, 33);
 
 -- reply 테이블에 샘플 댓글 30개를 추가하세요.(작성일은 기본값 대신 각각 다른 값으로 직접 입력하세요.)
 -- 작성일은 기본값(CURRENT_TIMESTAMP) 대신 각각 다른 값으로 직접 입력하세요.
