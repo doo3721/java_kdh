@@ -1,11 +1,22 @@
 package ch07;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
-public class JdbcPostTest {
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+public class ConnectionPoolTest {
+
+    private static DataSource dataSource;
+
+    static {
+        HikariConfig config = new HikariConfig("/hikari.properties");
+        dataSource = new HikariDataSource(config);
+    }
+
     private static final String DB_URL = "jdbc:mysql://localhost:3306/board_db?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
     private static final String DB_USER = "user1";
     private static final String DB_PASSWORD = "1111";
@@ -20,27 +31,33 @@ public class JdbcPostTest {
         findAll();
         deleteMemberAll(3);
         findAll();
+        search("안녕");
+
+        if (dataSource != null) {
+            ((HikariDataSource) dataSource).close();
+        }
     }
 
-    static void insert(int memberId, String title, String content) {
+    public static void insert(int memberId, String title, String content) {
         Connection conn = null;
-        Statement stat = null;
+        PreparedStatement pStat = null;
+        String sql = "INSERT INTO post (member_id, title, content) VALUES (?, ?, ?)";
 
         try {
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            conn = dataSource.getConnection();
 
-            stat = conn.createStatement();
-
-            int affectedRows = stat.executeUpdate(
-                    "INSERT INTO post (member_id, title, content) VALUES "
-                            + "('" + memberId + "', '" + title + "', '" + content + "')" );
+            pStat = conn.prepareStatement(sql);
+            pStat.setInt(1, memberId);
+            pStat.setString(2, title);
+            pStat.setString(3, content);
+            int affectedRows = pStat.executeUpdate();
 
             System.out.println("글 등록 완료: " + affectedRows + "건 반영됨\n");
 
         } catch (Exception e) {
             System.out.println("에러 발생: " + e.getMessage());
         } finally {
-            try { if (stat != null) stat.close(); } catch (Exception e) {
+            try { if (pStat != null) pStat.close(); } catch (Exception e) {
                 System.out.println("에러 발생: " + e.getMessage());
             }
             try { if (conn != null) conn.close(); } catch (Exception e) {
@@ -49,17 +66,26 @@ public class JdbcPostTest {
         }
     }
 
-    static void findAll() {
+    public static void search(String keyword) {
         Connection conn = null;
-        Statement stat = null;
+        PreparedStatement pStat = null;
         ResultSet rs = null;
+        StringBuilder sql = new StringBuilder("SELECT * FROM post");
+
+        boolean hasKeyword = keyword != null && !keyword.isEmpty();
+        if (hasKeyword) {
+            sql.append(" WHERE title LIKE ? OR content LIKE ?");
+        }
 
         try {
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            conn = dataSource.getConnection();
 
-            stat = conn.createStatement();
-
-            rs = stat.executeQuery("SELECT * FROM post");
+            pStat = conn.prepareStatement(sql.toString());
+            if (hasKeyword) {
+                pStat.setString(1, "%" + keyword + "%");
+                pStat.setString(2, "%" + keyword + "%");
+            }
+            rs = pStat.executeQuery();
 
             while (rs.next()) {
                 int id = rs.getInt("id");
@@ -78,7 +104,7 @@ public class JdbcPostTest {
             try { if (rs != null) rs.close(); } catch (Exception e) {
                 System.out.println("에러 발생: " + e.getMessage());
             }
-            try { if (stat != null) stat.close(); } catch (Exception e) {
+            try { if (pStat != null) pStat.close(); } catch (Exception e) {
                 System.out.println("에러 발생: " + e.getMessage());
             }
             try { if (conn != null) conn.close(); } catch (Exception e) {
@@ -87,17 +113,22 @@ public class JdbcPostTest {
         }
     }
 
-    static void findById(int id) {
+    public static void findAll() {
+       search("");
+    }
+
+    public static void findById(int id) {
         Connection conn = null;
-        Statement stat = null;
+        PreparedStatement pStat = null;
         ResultSet rs = null;
+        String sql = "SELECT * FROM post WHERE id = ?";
 
         try {
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            conn = dataSource.getConnection();
 
-            stat = conn.createStatement();
-
-            rs = stat.executeQuery("SELECT * FROM post WHERE id = " + id);
+            pStat = conn.prepareStatement(sql);
+            pStat.setInt(1, id);
+            rs = pStat.executeQuery();
 
             if (rs.next()) {
                 int memberId = rs.getInt("member_id");
@@ -119,7 +150,7 @@ public class JdbcPostTest {
             try { if (rs != null) rs.close(); } catch (Exception e) {
                 System.out.println("에러 발생: " + e.getMessage());
             }
-            try { if (stat != null) stat.close(); } catch (Exception e) {
+            try { if (pStat != null) pStat.close(); } catch (Exception e) {
                 System.out.println("에러 발생: " + e.getMessage());
             }
             try { if (conn != null) conn.close(); } catch (Exception e) {
@@ -128,24 +159,27 @@ public class JdbcPostTest {
         }
     }
 
-    static void update(int id, String title, String content) {
+    public static void update(int id, String title, String content) {
         Connection conn = null;
-        Statement stat = null;
+        PreparedStatement pStat = null;
+        String sql = "UPDATE post SET title = ?, content = ? WHERE id = ?";
+
 
         try {
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            conn = dataSource.getConnection();
 
-            stat = conn.createStatement();
-
-            int affectedRows = stat.executeUpdate(
-                    "UPDATE post SET title = '" +  title + "', content = '" + content + "' WHERE id = " + id );
+            pStat = conn.prepareStatement(sql);
+            pStat.setString(1, title);
+            pStat.setString(2, content);
+            pStat.setInt(3, id);
+            int affectedRows = pStat.executeUpdate();
 
             System.out.println("글 수정 완료: " + affectedRows + "건 반영됨\n");
 
         } catch (Exception e) {
             System.out.println("에러 발생: " + e.getMessage());
         } finally {
-            try { if (stat != null) stat.close(); } catch (Exception e) {
+            try { if (pStat != null) pStat.close(); } catch (Exception e) {
                 System.out.println("에러 발생: " + e.getMessage());
             }
             try { if (conn != null) conn.close(); } catch (Exception e) {
@@ -154,23 +188,24 @@ public class JdbcPostTest {
         }
     }
 
-    static void delete(int id) {
+    public static void delete(int id) {
         Connection conn = null;
-        Statement stat = null;
+        PreparedStatement pStat = null;
+        String sql = "DELETE FROM post WHERE id = ?";
 
         try {
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            conn = dataSource.getConnection();
 
-            stat = conn.createStatement();
-
-            int affectedRows = stat.executeUpdate("DELETE FROM post WHERE id = " + id );
+            pStat = conn.prepareStatement(sql);
+            pStat.setInt(1, id);
+            int affectedRows = pStat.executeUpdate();
 
             System.out.println("글 삭제 완료: " + affectedRows + "건 반영됨\n");
 
         } catch (Exception e) {
             System.out.println("에러 발생: " + e.getMessage());
         } finally {
-            try { if (stat != null) stat.close(); } catch (Exception e) {
+            try { if (pStat != null) pStat.close(); } catch (Exception e) {
                 System.out.println("에러 발생: " + e.getMessage());
             }
             try { if (conn != null) conn.close(); } catch (Exception e) {
@@ -179,24 +214,24 @@ public class JdbcPostTest {
         }
     }
 
-    static void deleteMemberAll(int memberId) {
+    public static void deleteMemberAll(int memberId) {
         Connection conn = null;
-        Statement stat = null;
-        String sql = "DELETE FROM post WHERE member_id = " + memberId;
+        PreparedStatement pStat = null;
+        String sql = "DELETE FROM post WHERE member_id = ?";
 
         try {
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            conn = dataSource.getConnection();
 
-            stat = conn.createStatement();
-
-            int affectedRows = stat.executeUpdate(sql);
+            pStat = conn.prepareStatement(sql);
+            pStat.setInt(1, memberId);
+            int affectedRows = pStat.executeUpdate();
 
             System.out.println(memberId + "번 회원 글 모두 삭제 완료: " + affectedRows + "건 반영됨\n");
 
         } catch (Exception e) {
             System.out.println("에러 발생: " + e.getMessage());
         } finally {
-            try { if (stat != null) stat.close(); } catch (Exception e) {
+            try { if (pStat != null) pStat.close(); } catch (Exception e) {
                 System.out.println("에러 발생: " + e.getMessage());
             }
             try { if (conn != null) conn.close(); } catch (Exception e) {

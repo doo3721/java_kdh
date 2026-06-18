@@ -78,3 +78,16 @@ SELECT id, title, created_at
     FROM post
     ORDER BY created_at DESC
     LIMIT 2, 2;
+
+
+
+-- 로그인 체크
+SELECT * 
+	FROM member 
+	WHERE email = 'haru@gmail.com' AND password = 'pwd123';
+
+
+-- SQL Injection
+SELECT * 
+	FROM member 
+	WHERE email = 'haru@gmail.com' AND password = '1' OR '1' = '1';
