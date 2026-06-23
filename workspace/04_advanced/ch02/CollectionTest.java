@@ -2,7 +2,7 @@ package ch02;
 
 import java.util.*;
 
-public class ArrayListTest {
+public class CollectionTest {
     void main() {
 //        String[] fruits = {"바나나", "사과", "오렌지", "파인애플", "수박"};
 

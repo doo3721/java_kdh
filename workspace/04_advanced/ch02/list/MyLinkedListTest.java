@@ -1,4 +1,4 @@
-package ch02.array;
+package ch02.list;
 
 public class MyLinkedListTest {
     void main() {
@@ -7,7 +7,7 @@ public class MyLinkedListTest {
 
         // MyLinkedList에 index 0~4까지 "데이터-index" 형식으로 문자열을 담는다
         for (int i = 0; i < 5; i++) {
-            list.appendLast("데이터-" + i);
+            list.add("데이터-" + i);
         }
 
         // MyLinkedList에 담긴 모든 요소를 출력한다
@@ -26,13 +26,13 @@ public class MyLinkedListTest {
         System.out.println(list);
 
         // index 3에 "데이터-5"를 삽입한다
-        list.appendTo(3, "데이터-5");
+        list.add(3, "데이터-5");
 
         // MyLinkedList에 담긴 모든 요소를 출력한다
         System.out.println(list);
 
         // 마지막 위치에 "데이터-6"를 추가한다
-        list.appendLast("데이터-6");
+        list.add("데이터-6");
 
         // MyLinkedList에 담긴 모든 요소를 출력한다
         System.out.println(list);

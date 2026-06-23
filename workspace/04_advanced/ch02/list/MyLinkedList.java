@@ -1,6 +1,6 @@
-package ch02.array;
+package ch02.list;
 
-public class MyLinkedList {
+public class MyLinkedList implements MyList{
 
     private class Node {
         /**
@@ -47,7 +47,7 @@ public class MyLinkedList {
      * @param index data가 삽입될 위치
      * @param data 삽입할 데이터
      */
-    public void appendTo(int index, Object data) {
+    public void add(int index, Object data) {
         if (index == 0) {
             appendFirst(data);
             return ;
@@ -67,8 +67,8 @@ public class MyLinkedList {
      * data를 index 마지막 위치에 삽입한다.
      * @param data 삽입할 데이터
      */
-    public void appendLast(Object data) {
-        appendTo(size, data);
+    public void add(Object data) {
+        add(size, data);
     }
 
     /**

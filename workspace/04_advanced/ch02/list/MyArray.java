@@ -1,6 +1,4 @@
-package ch02.array;
-
-import java.util.Arrays;
+package ch02.list;
 
 /**
  * 배열의 불편한 점은 다음과 같다
@@ -11,7 +9,7 @@ import java.util.Arrays;
  * 이러한 불편한 점을 개선하여 배열을 쓰기 쉽게 만드는 클래스
  */
 
-public class MyArray {
+public class MyArray<T> implements MyList<T>{
 
     /**
      * 내부적으로 요소를 저장하는 배열 선언
@@ -46,8 +44,8 @@ public class MyArray {
      * 배열의 마지막 위치에 지정한 elem를 추가한다
      * @param elem 배열에 추가할 요소
      */
-    public void append(Object elem) {
-        append(count, elem);
+    public void add(T elem) {
+        add(count, elem);
     }
 
     /**
@@ -55,7 +53,7 @@ public class MyArray {
      * @param index 삽입할 위치
      * @param elem 삽입할 요소
      */
-    public void append(int index, Object elem) {
+    public void add(int index, T elem) {
         if (index > count) {
             throw new ArrayIndexOutOfBoundsException("index(" + index + ") >= count(" + count + ")");
         }
@@ -83,7 +81,7 @@ public class MyArray {
      * 지정한 index의 요소를 삭제한다
      * @param index 삭제할 위치
      */
-    public void delete(int index) {
+    public void remove(int index) {
         this.checkIndex(index);
         System.arraycopy(data, index + 1, data, index, count - index - 1);
         data[--count] = null;
@@ -95,9 +93,9 @@ public class MyArray {
      * @param index 반환할 데이터의 위치
      * @return 반환할 데이터
      */
-    public Object getElem(int index) {
+    public T get(int index) {
         this.checkIndex(index);
-        return data[index];
+        return (T) data[index];
     }
 
     /**
