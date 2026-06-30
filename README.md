@@ -12,6 +12,7 @@
 ## 프론트엔드
 
 ### [HTML, CSS](docs/html_css.md)
+### [자바스크립트 기초](docs/javascript.md)
 
 
 ## 출처
