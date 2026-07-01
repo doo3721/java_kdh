@@ -13,22 +13,53 @@
       - 매개 변수가 하나만 있다면 매개변수의 괄호 생략 가능
     */
 
+    // 기존 함수(선언문)
+    function add(x, y) {
+      return x + y;
+    }
+    console.log(add(10, 20));
+    console.log(add("Hello", "World"));
+
+
     // 기존 함수(표현식)
+    let sum = function(x, y) {
+      return x + y;
+    };
+    console.log(sum(30, 40));
+    console.log(sum("Hello", "World"));
 
 
     // 화살표 함수
+    sum2 = (x, y) => {
+      return x + y;
+    };
+    console.log(sum2(50, 60));
+    console.log(sum2("Hello", "World"));
 
 
     // 화살표 함수 축약
+    let sum3 = (x, y) => x + y;
+    console.log(sum3(70, 80));
+    console.log(sum3("Hello", "World"));
 
 
     // 기존 함수
+    let add10 = function(x) {
+      return x + 10;
+    };
+    console.log(add10(10));
 
 
     // 화살표 함수
+    add10 = (x) => {
+      return x + 10;
+    };
+    console.log(add10(20));
 
 
     // 화살표 함수 축약
+    add10 = (x) => x + 10;
+    console.log(add10(30));
 
 
   </script>
