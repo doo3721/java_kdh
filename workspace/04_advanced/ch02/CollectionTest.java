@@ -12,9 +12,9 @@ public class CollectionTest {
 //        Vector<String> fruits = new Vector<>();
 
         // Set
-        HashSet<String> fruits = new HashSet<>();
+//        HashSet<String> fruits = new HashSet<>();
 //        TreeSet<String> fruits = new TreeSet<>();
-//        LinkedHashSet<String> fruits = new LinkedHashSet<>();
+        LinkedHashSet<String> fruits = new LinkedHashSet<>();
 
         fruits.add("바나나");
         fruits.add("사과");
